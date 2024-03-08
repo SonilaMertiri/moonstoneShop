@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Product</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+<body>
+    <style>
+        .fonti{
+            font-size: 26px;
+            margin: 2px !important;
+            margin-top: 2px;
+        }
+
+        /* Define @font-face */
+        @font-face {
+            font-family: 'Berlin Sans FB Bold';
+            src: url('{{ url_for('static', filename='fonts/Berlin Sans FB Bold ttf') }}') format('truetype');
+        }
+        .abs {
+            position: absolute;
+            top: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(255, 255, 255, 0.3);
+            padding: 20px;
+            border-radius: 5px;
+            z-index: 1;
+        }
+        .customform {
+            width: 100% !important; 
+        }
+    </style>
+            <div class="banner_bg_main">
+                <!-- header top section start -->
+                <div class="container">
+                    <div class="header_section_top">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="custom_menu fonti">
+                                    <ul>
+                                        <li><img src="{{ url_for('static', filename='images/moonstone.png') }}" alt="Your Image" width="167px" height="auto"></li>
+                                        <li><a href="/about/us">About Us</a></li>
+                                        <li><a href="/">Dashboard</a></li>
+                                        <li><a href="/allProducts">Buy Now</a></li>
+                                        {% if 'user_id' not in session%}
+                                            <li><a class="" href="/login">Login</a></li>
+                                        {% endif %}
+                                        {% if 'user_id' in session%}
+                                            <li><a class="" href="/logout">Logout</a></li>
+                                        {% endif%}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    <div class="d-flex flex-column justify-content-center align-items-center">
+        <form action="/item/update/{{item.id}}" method="POST" class="w-50 m-auto mt-5 abs costumform" enctype="multipart/form-data">
+            <h1>Add Item</h1>
+            <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" name="name" class="form-control" id="name" value="{{item.name}}">
+            </div>
+            {% with messages = get_flashed_messages(category_filter=["nameItem"]) %}
+                {% if messages %}
+                    
+                    {% for message in messages %}
+                        <p class="text-danger text-center">{{ message }}</p>
+                    {% endfor %}
+                    
+                {% endif %}
+            {% endwith %}
+            <div class="mb-3">
+                <label for="description" class="form-label">Item Description</label>
+                <textarea class="form-control" name="description" id="description" cols="30" rows="5">{{item.description}}</textarea>
+            </div>
+            {% with messages = get_flashed_messages(category_filter=["descriptionItem"]) %}
+                {% if messages %}
+                
+                    {% for message in messages %}
+                        <p class="text-danger text-center">{{ message }}</p>
+                    {% endfor %}
+                
+                {% endif %}
+            {% endwith %}
+            <div class="mb-3">
+                <label for="image" class="form-label">Photo</label>
+                <input type="file" name="image" class="form-control" id="image">
+            </div>
+            {% with messages = get_flashed_messages(category_filter=["imageItem"]) %}
+            {% if messages %}
+            
+                {% for message in messages %}
+                    <p class="text-danger text-center">{{ message }}</p>
+                {% endfor %}
+            
+            {% endif %}
+            {% endwith %}
+            <div class="mb-3">
+                <label for="price" class="form-label">Price</label>
+                <input type="number" name="price" class="form-control" id="price" value="{{item.price}}" placeholder="Enter price" min="0" step="0.01">
+            </div>
+            {% with messages = get_flashed_messages(category_filter=["priceItem"]) %}
+            {% if messages %}
+            
+                {% for message in messages %}
+                    <p class="text-danger text-center">{{ message }}</p>
+                {% endfor %}
+            
+            {% endif %}
+            {% endwith %}
+            <button type="submit" class="btn btn-primary">Update Item</button>
+        </form>
+    </div>
+    <img src="{{ url_for('static', filename='images/banner.png') }}" alt="world" class="img-fluid" style="position: relative; z-index: -1;">
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <title>Dashboard</title>
+    <style>
+        .fonti{
+            font-size: 26px;
+            margin: 2px !important;
+            margin-top: 2px;
+        }
+
+        /* Define @font-face */
+        @font-face {
+            font-family: 'Berlin Sans FB Bold';
+            src: url('{{ url_for('static', filename='fonts/Berlin Sans FB Bold ttf') }}') format('truetype');
+        }
+
+        body {
+            font-family: 'Berlin Sans FB Bold', sans-serif;
+        }
+        .dashboard-content {
+            position: absolute;
+            top: 15%;
+            left: 20%;
+            transform: translateX(-13%);
+            background-color: rgba(0, 0, 0, 0.271);
+            padding: 20px;
+            border-radius: 5px;
+            z-index: 1;
+        }
+        .custom-container {
+            max-width: 1200px; /* Adjust the maximum width as needed */
+            margin: 0 auto; /* Center the container horizontally */
+        }
+        .card {
+            padding: 15px; /* Add padding to the card */
+            margin-bottom: 20px; /* Add margin at the bottom of each card */
+        }
+        .card-img-top {
+            height: 200px; /* Set a fixed height for the image container */
+            object-fit: cover; /* Ensure the image fills the container */
+        }
+        .all_products{
+            margin-left: 440px;
+            margin-top: 20px;
+        }
+        .mart{
+            margin-top: 470px;
+        }
+        .colorBlack{
+            /* background-color: rgb(114, 112, 112); */
+        }
+    </style>
+</head>
+<body>
+    <div>
+    <div class="banner_bg_main">
+        <!-- header top section start -->
+        <div class="container">
+            <div class="header_section_top">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="custom_menu fonti">
+                            <ul>
+                                <li><img src="{{ url_for('static', filename='images/moonstone.png') }}" alt="Your Image" width="167px" height="auto"></li>
+                                <li><a href="/about/us">About Us</a></li>
+                                <li><a href="/">Dashboard</a></li>
+                                <li><a href="/allProducts">Buy Now</a></li>
+                                {% if 'user_id' not in session%}
+                                    <li><a class="" href="/login">Login</a></li>
+                                {% endif %}
+                                {% if 'user_id' in session%}
+                                <li><a class="" href="/new/message">Customer Suggestions</a></li>
+                                {% endif%}
+                                {% if 'user_id' in session%}
+                                <li><a class="" href="/logout">Logout</a></li>
+                                {% endif%}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+    <div class="dashboard-content">
+        <h2 class="text-white font-weight-bold all_products">ALL PRODUCTS</h2>
+        {% if 'user_id' in session and user['role'] == 'admin' %}
+            <a class="tbtn btn-outline-light btn-sm btn mb-2 ml-3" href="/items/new">Add items >></a>
+        {% endif %}
+        <div class="container custom-container">
+            <div class="row">
+                {% for item in items %}
+                <div class="col-md-3 mb-4"> <!-- Adjust column width to make it wider -->
+                    <div class="card colorBlack">
+                        {% if item.image %}
+                        <img src="{{ url_for('static', filename='itemsimages/' + item.image) }}" class="card-img-top" alt="{{ item.name }}">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ item.name }}</h5>
+                            <p class="card-text">{{ item.description }}</p>
+                            <p class="card-text">${{ item.price }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <a href="/item/{{ item.id }}" class="btn btn-primary">More</a>
+                                {% if 'user_id' in session%}
+                                <a href="/checkout/paypal/{{ item.id }}" class="btn btn-success">Checkout</a>
+                                {%endif%}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <img src="../static/images/banner.png" alt="world" class="img-fluid" style="position: relative; z-index: -1;">
+    </div>
+    <div class="footer_section layout_padding mart">
+        <div class="container">
+            <div class="footer_logo"><a href="#"><img src="{{ url_for('static', filename='images/footer-logo.png') }}"></a></div>
+            <div class="input_bt">
+                <input type="text" class="mail_bt" placeholder="Your Email" name="Your Email">
+                <span class="subscribe_bt" id="basic-addon2"><a href="#">Subscribe</a></span>
+            </div>
+            <div class="footer_menu">
+                <ul>
+                    <li><a href="#">Best Sellers</a></li>
+                    <li><a href="#">Gift Ideas</a></li>
+                    <li><a href="#">New Releases</a></li>
+                    <li><a href="#">Today's Deals</a></li>
+                    <li><a href="#">Customer Service</a></li>
+                </ul>
+            </div>
+            <div class="location_main">Help Line Number : <a href="#">+1 1800 1200 1200</a></div>
+        </div>
+    </div>
+
+</body>
+</html>
