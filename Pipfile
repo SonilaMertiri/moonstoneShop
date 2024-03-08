@@ -9,6 +9,7 @@ pymysql = "*"
 bcrypt = "*"
 paypalrestsdk = "*"
 flask-mail = "*"
+flask-bcrypt = "*"
 
 [dev-packages]
 

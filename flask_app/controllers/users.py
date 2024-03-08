@@ -6,22 +6,13 @@ from flask_app.models.user import User
 from flask_app.models.item import Item
 
 import paypalrestsdk
+import os
 
 from flask_mail import Mail, Message
 mail = Mail(app)
 
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'sonilamertiri1@gmail.com'
-app.config['MAIL_PASSWORD'] = 'jsnt mvqe tdfd pihb'
-app.config['MAIL_DEFAULT_SENDER'] = ('Your Name', 'sonilamertiri1@gmail.com')
 
 
-# sundbox personal
-
-# F%o1Zm0I
-# sb-8vljf29776541@personal.example.com
 
 # ketu krijojme routet per userin
 
@@ -99,8 +90,8 @@ def checkoutPaypal(id):
     try:
         paypalrestsdk.configure({
             "mode": "sandbox",
-            "client_id": "AQtIlqp4cJJNLjDFvJQH_4cmmYj-srYBVIP0jjgp5-8wMsCWBYv51HB74GRc5VXo0JijTqEMw3sHy70-",
-            "client_secret": "ELpwmVruy5GUnQHbFr95TC39upzGN0qro4yrXhErp7DYZwOZjgX9LSbZONTFjUz6kVVOBT_KYCpyrvf-"
+            "client_id": os.environ.get('PAYPAL_CLIENT_ID'),
+            "client_secret": os.environ.get('PAYPAL_CLIENT_SECRET')
         })
         payment = paypalrestsdk.Payment({
             "intent": "sale",
@@ -141,8 +132,8 @@ def paymentSuccess():
     try:
         paypalrestsdk.configure({
             "mode": "sandbox",
-            "client_id": "AQtIlqp4cJJNLjDFvJQH_4cmmYj-srYBVIP0jjgp5-8wMsCWBYv51HB74GRc5VXo0JijTqEMw3sHy70-",
-            "client_secret": "ELpwmVruy5GUnQHbFr95TC39upzGN0qro4yrXhErp7DYZwOZjgX9LSbZONTFjUz6kVVOBT_KYCpyrvf-"
+            "client_id": os.environ.get('PAYPAL_CLIENT_ID'),
+            "client_secret": os.environ.get('PAYPAL_CLIENT_SECRET')
         })
         payment = paypalrestsdk.Payment.find(payment_id)
         if not payment.execute({"payer_id": payer_id}):  #because of one unexpected change in paypal we must do the condition "if not" sp we can proceed with success checkout, you should see if it changes again later
@@ -187,8 +178,8 @@ def payment_success():
 #     try:
 #         paypalrestsdk.configure({
 #             "mode": "sandbox",
-#             "client_id": "AQtIlqp4cJJNLjDFvJQH_4cmmYj-srYBVIP0jjgp5-8wMsCWBYv51HB74GRc5VXo0JijTqEMw3sHy70-",
-#             "client_secret": "ELpwmVruy5GUnQHbFr95TC39upzGN0qro4yrXhErp7DYZwOZjgX9LSbZONTFjUz6kVVOBT_KYCpyrvf-"
+#             "client_id": "",
+#             "client_secret": ""
 #         })
         
 #         payment = paypalrestsdk.Payment.find(payment_id)
@@ -223,7 +214,7 @@ def payment_success():
 
 # def send_purchase_confirmation_email():
 #     # Send email to the user
-#     msg = Message('Purchase Confirmation', recipients=['soncemertiri@gmail.com'])
+#     msg = Message('Purchase Confirmation', recipients=['son@mail.com'])
 #     msg.body = 'Thank you for your purchase!'
 #     mail.send(msg)
 
