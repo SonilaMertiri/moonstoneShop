@@ -92,6 +92,11 @@ def checkoutPaypal(id):
             "mode": "sandbox",
             "client_id": os.environ.get('PAYPAL_CLIENT_ID'),
             "client_secret": os.environ.get('PAYPAL_CLIENT_SECRET')
+
+            #USE THE FORM BELOW WHEN YOU MAKE CHACKOUT, THE ABOVE FORM DOESNT FUNCTION FOR THE MOMENT YOU HAVE TO ASK SOMEONE
+            #LOOK FOR CLIENT_ID AND CLIENT_SECCRET AT .env OR AT YOUR DEVELOPER ACC
+            #"client_id": "your client id from sandbox busines acc",
+            #"client_secret": "your client secret from sandbox busines acc"
         })
         payment = paypalrestsdk.Payment({
             "intent": "sale",
@@ -100,7 +105,7 @@ def checkoutPaypal(id):
             },
             "transactions": [{
                 "amount": {
-                    "total": totalPrice,
+                    "total": str(totalPrice), #kete e kisha vetem totalPrice me pare
                     "currency": "USD"
                 },
                 "description": f"Pagese per produktin {item} duke perfshire edhe shipping fee {taksa}!"
@@ -134,6 +139,10 @@ def paymentSuccess():
             "mode": "sandbox",
             "client_id": os.environ.get('PAYPAL_CLIENT_ID'),
             "client_secret": os.environ.get('PAYPAL_CLIENT_SECRET')
+
+            #USE THE FORM BELOW WHEN YOU MAKE CHACKOUT, THE ABOVE FORM DOESNT FUNCTION FOR THE MOMENT YOU HAVE TO ASK SOMEONE
+            #"client_id": "your client id from sandbox busines acc",
+            #"client_secret": "your client secret from sandbox busines acc"
         })
         payment = paypalrestsdk.Payment.find(payment_id)
         if not payment.execute({"payer_id": payer_id}):  #because of one unexpected change in paypal we must do the condition "if not" sp we can proceed with success checkout, you should see if it changes again later
@@ -164,7 +173,7 @@ def paymentSuccess():
 @app.route('/paymentSuccess')
 def payment_success():
     # Send email to the user
-    # msg = Message('Purchase Confirmation', recipients=['soncemertiri@gmail.com'])
+    # msg = Message('Purchase Confirmation', recipients=['so@gmail.com'])
     # msg.body = 'Thank you for your purchase!'
     # mail.send(msg)
     return render_template('payment_success.html')
